@@ -1,0 +1,231 @@
+  <!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		
+		<meta name="generator" content="Hugo 0.50" />
+		<title>Additional Linux Notes &middot; Bruce Y. Li&#39;s Site</title>
+		<link rel="stylesheet" href="https://bruceyli.com/css/bulma.css">
+		<link rel="stylesheet" href="https://bruceyli.com/css/style.css">
+		<link rel="stylesheet" href="https://bruceyli.com/css/highlight.css">
+    <link rel="icon" href="https://bruceyli.com/images/favicon.ico" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+
+
+  <body>
+  
+  <nav class="navbar" style = "padding: 0rem 4rem; margin-bottom: 0;">
+  <div class="navbar-brand">
+    <div class="navbar-item">
+      <a class="button is-dark is-outlined" href="https://bruceyli.com">
+        Bruce Y Li's Website
+      </a>
+    </div>
+
+  </div>
+
+  <div class="navbar-menu" style="border-bottom: 1px solid #f2f2f2">
+    <div class="navbar-end">
+      <a class="navbar-item" href="https://bruceyli.com/research">
+        Research
+      </a>
+      <a class="navbar-item" href="https://bruceyli.com/code">
+        Code
+      </a>
+      <a class="navbar-item" href="https://bruceyli.com/data">
+        Data
+      </a>
+      <a class="navbar-item" href="https://bruceyli.com/blog">
+        Blog
+      </a>
+      <a class="navbar-item" href="https://bruceyli.com/about">
+        About
+      </a>
+    </div>
+  </div>
+</nav>
+
+
+  <section class="section is-fluid"> <div class="columns">
+      <div class="column is-8 is-offset-2">
+  
+        <div class="content">
+          <h2 class="title is-3 is-spaced posttitle">
+            Additional Linux Notes 
+          </h2>
+          <h6 class="subtitle is-6" style="font-style: italic; font-size:90%;">
+             Publish Date: May 10, 2014 &nbsp;&nbsp;
+             Last Update: Nov 10, 2015
+          </h6>
+  
+          
+            
+              <div class="columns">
+                <div class="column is-3 is-hidden-touch">
+                  <aside class="menu">
+                    <p class="menu-label">
+                      Table of Contents
+                    </p>
+                    <p class="menu-list">
+                      <nav id="TableOfContents">
+<ul>
+<li><a href="#bios-update">Bios Update</a></li>
+<li><a href="#stability-improvement">Stability Improvement</a>
+<ul>
+<li><a href="#linux-lts">Linux-lts</a></li>
+<li><a href="#back-up">Back Up</a></li>
+<li><a href="#daily-maintenance">Daily Maintenance</a></li>
+</ul></li>
+<li><a href="#manual-wireless-configuration">Manual Wireless Configuration</a></li>
+</ul>
+</nav>
+                    </p>
+                  </aside>
+                </div>
+                <div class="column">
+                  
+
+<h1 id="bios-update">Bios Update</h1>
+
+<ol>
+<li>Download the iso file from Lenovo&rsquo;s website</li>
+<li>Use the <code>genisoimage</code> package and convert the iso to bootable file</li>
+<li>Use <code>dd</code> to write the file into the usb</li>
+</ol>
+
+<pre><code class="language-bash">geteltorito xxx.iso &gt; bios.img
+sudo dd bs=4M if=/path/to/bios.img of=/dev/sdX &amp;&amp; sync
+</code></pre>
+
+<h1 id="stability-improvement">Stability Improvement</h1>
+
+<p>Using Linux system should be intrinsically stable, as long as you know what
+you are doing. More practically, suggestions below should provide a good guide
+to main a stable system.</p>
+
+<h2 id="linux-lts">Linux-lts</h2>
+
+<p>Use <code>linux-lts</code> to have a more stable system.</p>
+
+<h2 id="back-up">Back Up</h2>
+
+<p>I use four tools to back up my system:</p>
+
+<ol>
+<li>Google Drive: back up all my working directories</li>
+<li>Git: back up all my codes and documents</li>
+<li>NAS: back up data and large personal files</li>
+<li>tar: back up full system, please refer to [my blog article][2] for more
+    detailed guide</li>
+</ol>
+
+<h2 id="daily-maintenance">Daily Maintenance</h2>
+
+<p>Based on my past experience, it is IMPORTANT to keep a large pacman library,
+as the upgrade is usually accompanied with bugs, and it is very useful to
+downgrade. Also upgrade the system at a higher frequency.</p>
+
+<h1 id="manual-wireless-configuration">Manual Wireless Configuration</h1>
+
+<p>Wireless configuration has been notoriously painful. To manually connect to
+a wireless spot is thus very important. Note most configurations below require
+root permission.</p>
+
+<pre><code class="language-bash">## Step 1: Make sure the device is loaded
+ip link 
+ip link set &lt;wlxxx&gt; up   # proceed if no error is reported
+
+## Step 2: Connect to no-passwd ssid
+iw dev wlxx link        # check status
+iw dev wlxx scan | less # scan available network
+iw wlxx connect SSID    # connect to SSID
+dhcpcd wlxx             # to get dynamic IP address
+
+## Step 3: Connect to Secure ssid
+## WEP
+iw dev wlxx connect SSID key 0:KEY
+## WPA/WPA2
+wpa_supplicant -i interface -c &lt;(wpa_passphrase SSID KEY)
+</code></pre>
+
+<p>Alternatively, I use <code>netctl</code> to manage the connections. I find this way
+works better with Arch Linux.</p>
+
+                </div>
+              </div>
+            
+          
+        </div>
+
+      </div>
+    </div>
+  </section>
+     
+  <footer class="footer" style="background-color:transparent;">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-offset-4 is-4" style="border-bottom: 1px solid #f2f2f2; ">
+        <nav class="level">
+          <div class="level-item has-text-centered">
+            <a href="mailto:yuan@bruceyli.com" style="color: grey; font-size: 0.9rem;">
+              <i class="fas fa-envelope fa-lg" aria-hidden="true"></i>
+            </a>
+          </div>
+          
+          <div class="level-item has-text-centered">
+            <a href="https://github.com/lipop/" style="color: grey; font-size: 0.9rem;">
+              <i class="fab fa-github fa-lg" aria-hidden="true"></i>
+            </a>
+          </div>
+          <div class="level-item has-text-centered">
+            <a href="https://www.linkedin.com/in/yuan-li-b0339759/" style="color: grey; font-size: 0.9rem;">
+              <i class="fab fa-linkedin-in fa-lg" aria-hidden="true"></i>
+            </a>
+          </div>
+          <div class="level-item has-text-centered">
+            <a href="https://zhuanlan.zhihu.com/de-bug" style="color: grey; font-size: 0.9rem;">
+              <i class="fab fa-zhihu fa-lg" aria-hidden="true"></i>
+            </a>
+          </div>
+        </nav>
+      </div>
+    </div>
+    <div class="columns">
+      <div class="column has-text-centered">
+        <p class="copyright" style="font-size:0.9rem; color: grey;">
+          © Copyright 2010-2018 <i class="fas fa-arrow-circle-right" aria-hidden="true"></i> 
+          Handcrafted by Bruce Y. Li
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+  <script type="text/javascript" src="https://bruceyli.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-57655202-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+
+
+  
+
+  </body>
+</html>

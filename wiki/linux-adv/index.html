@@ -1,0 +1,245 @@
+  <!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		
+		<meta name="generator" content="Hugo 0.30" />
+		<title>Advanced Linux Usage &middot; Bruce Y. Li&#39;s Site</title>
+		<link rel="stylesheet" href="http://www.bruceyli.com/css/bulma.css">
+		<link rel="stylesheet" href="http://www.bruceyli.com/css/style.css">
+		<link rel="stylesheet" href="http://www.bruceyli.com/css/highlight.css">
+		<link rel="stylesheet" href="http://www.bruceyli.com/css/font-awesome.min.css">
+    <link rel="icon" href="http://www.bruceyli.com/images/favicon.ico" />
+
+  <body>
+  
+  <nav class="navbar" style = "padding: 0rem 4rem; margin-bottom: 0;">
+  <div class="navbar-brand">
+    <div class="navbar-item">
+      <a class="button is-dark is-outlined" href="http://www.bruceyli.com">
+        Bruce Y Li's Website
+      </a>
+    </div>
+
+  </div>
+
+  <div class="navbar-menu" style="border-bottom: 1px solid #f2f2f2">
+    <div class="navbar-end">
+      <a class="navbar-item" href="http://www.bruceyli.com/research">
+        Research
+      </a>
+      <a class="navbar-item" href="http://www.bruceyli.com/data">
+        Data
+      </a>
+      <a class="navbar-item" href="http://www.bruceyli.com/wiki">
+        Wiki
+      </a>
+      <a class="navbar-item" href="http://www.bruceyli.com/blog">
+        Blog
+      </a>
+      <a class="navbar-item" href="http://www.bruceyli.com/about">
+        About
+      </a>
+    </div>
+  </div>
+</nav>
+
+
+  <section class="section is-fluid">
+    <div class="columns">
+      <div class="column is-10 is-offset-1">
+  
+        <div class="content">
+          <h2 class="title is-3 is-spaced">
+            Advanced Linux Usage 
+          </h2>
+          <h6 class="subtitle is-6" style="font-style: italic; font-size:90%;">
+             Publish Date: Apr 25, 2017 &nbsp;&nbsp;
+             Last Update: Apr 25, 2017
+          </h6>
+  
+          
+            
+              <div class="columns">
+                <div class="column is-3 is-hidden-touch">
+                  <aside class="menu">
+                    <p class="menu-label">
+                      Table of Contents
+                    </p>
+                    <p class="menu-list">
+                      <nav id="TableOfContents">
+<ul>
+<li><a href="#bios-update">Bios Update</a></li>
+<li><a href="#stability-improvement">Stability Improvement</a>
+<ul>
+<li><a href="#linux-lts">Linux-lts</a></li>
+<li><a href="#back-up">Back Up</a></li>
+<li><a href="#daily-maintenance">Daily Maintenance</a></li>
+</ul></li>
+<li><a href="#manual-wireless-configuration">Manual Wireless Configuration</a></li>
+<li><a href="#thinkpad-tweaks">Thinkpad Tweaks</a></li>
+</ul>
+</nav>
+                    </p>
+                  </aside>
+                </div>
+                <div class="column">
+                  
+
+<p>This wiki documents advance usage of linux system</p>
+
+<h1 id="bios-update">Bios Update</h1>
+
+<ol>
+<li>Download the iso file from Lenovo&rsquo;s website</li>
+<li>Use the <code>genisoimage</code> package and convert the iso to bootable file</li>
+<li>Use <code>dd</code> to write the file into the usb</li>
+</ol>
+
+<pre><code class="language-bash">geteltorito xxx.iso &gt; bios.img
+sudo dd bs=4M if=/path/to/bios.img of=/dev/sdX &amp;&amp; sync
+</code></pre>
+
+<h1 id="stability-improvement">Stability Improvement</h1>
+
+<p>Using Linux system should be intrinsically stable, as long as you know what
+you are doing. More practically, suggestions below should provide a good guide
+to main a stable system.</p>
+
+<h2 id="linux-lts">Linux-lts</h2>
+
+<p>Use <code>linux-lts</code> to have a more stable system.</p>
+
+<h2 id="back-up">Back Up</h2>
+
+<p>I use four tools to back up my system:</p>
+
+<ol>
+<li>Google Drive: back up all my working directories</li>
+<li>Git: back up all my codes and documents</li>
+<li>NAS: back up data and large personal files</li>
+<li>tar: back up full system, please refer to <a href="http://yuan.villagel.com/blog/2015-10-06-backup.html">my blog article</a> for more
+    detailed guide</li>
+</ol>
+
+<h2 id="daily-maintenance">Daily Maintenance</h2>
+
+<p>Based on my past experience, it is IMPORTANT to keep a large pacman library,
+as the upgrade is usually accompanied with bugs, and it is very useful to
+downgrade. Also upgrade the system at a higher frequency.</p>
+
+<h1 id="manual-wireless-configuration">Manual Wireless Configuration</h1>
+
+<p>Wireless configuration has been notoriously painful. To manually connect to
+a wireless spot is thus very important. Note most configurations below require
+root permission.</p>
+
+<pre><code class="language-bash"># Step 1: Make sure the device is loaded
+ip link 
+ip link set &lt;wlxxx&gt; up   # proceed if no error is reported
+
+# Step 2: Connect to no-passwd ssid
+iw dev wlxx link        # check status
+iw dev wlxx scan | less # scan available network
+iw wlxx connect SSID    # connect to SSID
+dhcpcd wlxx             # to get dynamic IP address
+
+# Step 3: Connect to Secure ssid
+# WEP
+iw dev wlxx connect SSID key 0:KEY
+# WPA/WPA2
+wpa_supplicant -i interface -c &lt;(wpa_passphrase SSID KEY)
+</code></pre>
+
+<p>Alternatively, I use <code>netctl</code> to manage the connections. I find this way
+works better with Arch Linux.</p>
+
+<h1 id="thinkpad-tweaks">Thinkpad Tweaks</h1>
+
+<p><a href="http://www.function.fr/advanced-linux-configuration-for-lenovo-thinkpad-x240/">This Thread</a> provides a great guide to setting up the Arch system on a X240.</p>
+
+<ol>
+<li><p>Power Management
+Follow the community&rsquo;s recommendation, I use <code>tlp</code> to manage the power. Default
+configuration should be enough. Additional tools provided for Thinkpad can also
+be utilized by installing <code>tpacpi-bat</code>, <code>acpi_call</code>, <code>acpi</code>, <code>acpid</code>.</p></li>
+
+<li><p>Keybindings
+Use <code>xbindkeys</code>, we can re-map the brightness and volume controls. Moreover,
+we can set other function keys to allow for additional settings.</p></li>
+</ol>
+
+                </div>
+              </div>
+            
+          
+        </div>
+
+      </div>
+    </div>
+  </section>
+     
+  <footer class="footer" style="background-color:transparent;">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-offset-4 is-4" style="border-bottom: 1px solid #f2f2f2; ">
+        <nav class="level">
+          <div class="level-item has-text-centered">
+            <a href="mailto:yuan@bruceyli.com" style="color: grey; font-size: 0.9rem;">
+              <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            </a>
+          </div>
+          <div class="level-item has-text-centered">
+            <a href="https://medium.com/" style="color: grey; font-size: 0.9rem;">
+              <i class="fa fa-medium fa-lg" aria-hidden="true"></i>
+            </a>
+          </div>
+          <div class="level-item has-text-centered">
+            <a href="https://github.com/lipop/" style="color: grey; font-size: 0.9rem;">
+              <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+            </a>
+          </div>
+          <div class="level-item has-text-centered">
+            <a href="https://zhuanlan.zhihu.com/de-bug" style="color: grey; font-size: 0.9rem;">
+              <i class="fa fa-pencil fa-lg" aria-hidden="true"></i>
+            </a>
+          </div>
+        </nav>
+      </div>
+    </div>
+    <div class="columns">
+      <div class="column has-text-centered">
+        <p class="copyright" style="font-size:0.9rem; color: grey;">
+          © Copyright 2010-2017 <i class="fa fa-heart" aria-hidden="true"></i> 
+          Bruce Y. Li
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+  <script type="text/javascript" src="http://www.bruceyli.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-57655202-2', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+
+  
+
+  </body>
+</html>

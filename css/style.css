@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css?family=Bitter:400');
+@import url(https://fonts.googleapis.com/css?family=Philosopher:400);
+
+body {
+  color: #606c76;
+  font-family: 'Bitter', BlinkMacSystemFont, -apple-system, 'Microsoft Yahei', "Kaiti", "Segoe UI", "Roboto", "Oxygen", "Cantarell", "Ubuntu", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+}
+
+.posttitle {
+  font-family: 'Philosopher', 'Bitter', 'Microsoft Yahei';
+}
+
+.indexlink {
+  font-size: 1.2rem;
+  font-family: 'Philosopher', 'Bitter';
+}
+
+.listtitle {
+  font-family: 'Philosopher', 'Bitter';
+}
+
+h1, h2 {
+  font-family: 'Philosopher', 'Bitter';
+}

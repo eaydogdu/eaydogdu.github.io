@@ -1,0 +1,409 @@
+  <!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		
+		<meta name="generator" content="Hugo 0.30" />
+		<title>Git &middot; Bruce Y. Li&#39;s Site</title>
+		<link rel="stylesheet" href="http://www.bruceyli.com/css/bulma.css">
+		<link rel="stylesheet" href="http://www.bruceyli.com/css/style.css">
+		<link rel="stylesheet" href="http://www.bruceyli.com/css/highlight.css">
+		<link rel="stylesheet" href="http://www.bruceyli.com/css/font-awesome.min.css">
+    <link rel="icon" href="http://www.bruceyli.com/images/favicon.ico" />
+
+  <body>
+  
+  <nav class="navbar" style = "padding: 0rem 4rem; margin-bottom: 0;">
+  <div class="navbar-brand">
+    <div class="navbar-item">
+      <a class="button is-dark is-outlined" href="http://www.bruceyli.com">
+        Bruce Y Li's Website
+      </a>
+    </div>
+
+  </div>
+
+  <div class="navbar-menu" style="border-bottom: 1px solid #f2f2f2">
+    <div class="navbar-end">
+      <a class="navbar-item" href="http://www.bruceyli.com/research">
+        Research
+      </a>
+      <a class="navbar-item" href="http://www.bruceyli.com/data">
+        Data
+      </a>
+      <a class="navbar-item" href="http://www.bruceyli.com/wiki">
+        Wiki
+      </a>
+      <a class="navbar-item" href="http://www.bruceyli.com/blog">
+        Blog
+      </a>
+      <a class="navbar-item" href="http://www.bruceyli.com/about">
+        About
+      </a>
+    </div>
+  </div>
+</nav>
+
+
+  <section class="section is-fluid">
+    <div class="columns">
+      <div class="column is-10 is-offset-1">
+  
+        <div class="content">
+          <h2 class="title is-3 is-spaced">
+            Git 
+          </h2>
+          <h6 class="subtitle is-6" style="font-style: italic; font-size:90%;">
+             Publish Date: Apr 25, 2017 &nbsp;&nbsp;
+             Last Update: Oct 26, 2017
+          </h6>
+  
+          
+            
+              <div class="columns">
+                <div class="column is-3 is-hidden-touch">
+                  <aside class="menu">
+                    <p class="menu-label">
+                      Table of Contents
+                    </p>
+                    <p class="menu-list">
+                      <nav id="TableOfContents">
+<ul>
+<li><a href="#basic">Basic</a>
+<ul>
+<li><a href="#configurations">Configurations</a></li>
+<li><a href="#basic-workflow">Basic workflow</a></li>
+<li><a href="#utilize-branches">Utilize Branches</a></li>
+<li><a href="#status-checking">Status Checking</a></li>
+<li><a href="#remote-repository">Remote repository</a></li>
+</ul></li>
+<li><a href="#advanced">Advanced</a>
+<ul>
+<li><a href="#git-repository-on-a-server">Git Repository on a server</a>
+<ul>
+<li><a href="#server-side">Server Side</a></li>
+<li><a href="#client-side">Client Side</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#tricks">Tricks</a>
+<ul>
+<li><a href="#clone-with-submodule">Clone with submodule</a></li>
+<li><a href="#use-ssh-to-connect-to-github">Use SSH to connect to github</a></li>
+<li><a href="#keep-an-empty-folder">Keep an empty folder</a></li>
+<li><a href="#to-delete-a-file-from-tracking">To Delete a file from Tracking</a></li>
+<li><a href="#to-unstage-the-changes">To unstage the changes</a></li>
+</ul></li>
+</ul>
+</nav>
+                    </p>
+                  </aside>
+                </div>
+                <div class="column">
+                  
+
+<h1 id="basic">Basic</h1>
+
+<h2 id="configurations">Configurations</h2>
+
+<pre><code class="language-bash"># List current configurations
+git config --list 
+# Modify configurations
+git config -e [--global]
+
+# Modify personal info
+git config --global user.name &quot;XXX&quot;
+git config --global user.email &quot;XXX&quot;
+</code></pre>
+
+<h2 id="basic-workflow">Basic workflow</h2>
+
+<p>The basic steps to create a repository:</p>
+
+<ol>
+<li><p>Initiate the project</p>
+
+<pre><code class="language-bash">git init                // in the current folder
+git init [project name] // create a folder
+</code></pre></li>
+
+<li><p>Add and delete files</p>
+
+<pre><code class="language-bash"># Add files 
+git add [file1] [file2]
+git add [dir]
+git add .
+# Delete files
+# Delete files both in the workspace and index
+git rm [file1] 
+# Stop tracking but keep in workspace
+git rm --cached [file]
+# Change the file name
+git mv [oldName] [newName] 
+</code></pre></li>
+
+<li><p>Commit the index to repository</p>
+
+<pre><code class="language-bash"># Commit all files in the index
+git commit -m [message] 
+# Commit certain files in the index
+git commit [file1] [file2] -m [message]
+# Commit all changes after last commit
+git commit -a
+# Commit with all diff information
+git commit -v
+# Amend the last commit
+git commit --amend -m [message]
+</code></pre></li>
+</ol>
+
+<p>Add remote repository</p>
+
+<pre><code class="language-bash">git remote add origin git@bitbucket.org:xxx/xxx.git
+</code></pre>
+
+<h2 id="utilize-branches">Utilize Branches</h2>
+
+<ol>
+<li><p>Create new branch</p>
+
+<pre><code class="language-bash"># List all local branch
+git branch
+# List all remote branch
+git branch -r
+# List all branch
+git branch -a
+# Create a new branch
+git branch [newBranch]
+# Create a new branch and checkout it
+git checkout -b [newBranch]
+# Checkout to a branch
+git checkout [branch]
+</code></pre></li>
+
+<li><p>Local and remote branch
+We push or pull the branches to remote with</p>
+
+<pre><code class="language-bash"># Push a branch to remote
+git push origin [branch]
+# Pull the local branch
+git pull [remote] [branch]
+</code></pre></li>
+</ol>
+
+<p>Further, we can checkout a remote branch with track</p>
+
+<pre><code class="language-bash"># Create a branch and track with remote
+git branch --track [localNew] [remoteBranch]
+</code></pre>
+
+<ol>
+<li><p>Merge branches</p>
+
+<pre><code class="language-bash">git checkout master
+# switch to the master branch
+git merge dev
+# merge the development
+</code></pre></li>
+
+<li><p>Delete branch</p>
+
+<pre><code class="language-bash">git branch -D dev
+# delete the local branch dev
+git push origin --delete dev
+# delete the remote branch dev
+</code></pre></li>
+</ol>
+
+<h2 id="status-checking">Status Checking</h2>
+
+<pre><code class="language-bash"># Show the changed files
+git status
+# Show the version history of current branch
+git log
+# Show the version history of a file
+git log --follow [file]
+# Show the difference between index and workspace
+git diff
+# Show the content change
+git show [commit]
+</code></pre>
+
+<h2 id="remote-repository">Remote repository</h2>
+
+<pre><code class="language-bash"># Download all change
+git fetch [remote]
+# Show all remote repository
+git remote -v
+# Add a remote
+git remote add [name] [url]
+# With branch
+git pull [remote] [branch]
+git push [remote] [branch]
+# Push all branches to remote
+git push [remote] --all
+</code></pre>
+
+<h1 id="advanced">Advanced</h1>
+
+<h2 id="git-repository-on-a-server">Git Repository on a server</h2>
+
+<h3 id="server-side">Server Side</h3>
+
+<p>First thing is that we need to set up git repository</p>
+
+<pre><code class="language-bash">git init --bare
+</code></pre>
+
+<p>Since I am using git to manage my wiki and blog system, it is important to set
+up a <strong>post-receive</strong> action, which copies the git repository to the <code>/var/www</code>
+folder. To do this, a typical post-receive doc is written as</p>
+
+<pre><code class="language-bash">#!/bin/bash
+GIT_REPO=/home/xxx/GIT/wiki
+TMP_GIT_CLONE=/tmp/wiki
+PUBLIC_WWW=/var/www/wiki
+rm -rf ${TMP_GIT_CLONE}
+git clone ${GIT_REPO} ${TMP_GIT_CLONE}
+rm -rf ${PUBLIC_WWW}/*
+cp -rf ${TMP_GIT_CLONE}/* ${PUBLIC_WWW}
+</code></pre>
+
+<p>This post-recieve file is put in the <code>git/hooks/</code> folder.</p>
+
+<h3 id="client-side">Client Side</h3>
+
+<p>Usually the port is not set at the default port, therefore we need to modify
+the <code>.ssh/config</code> file to change the port</p>
+
+<pre><code class="language-ssh">host HOST
+hostname xxxx.com
+port PORT
+</code></pre>
+
+<p>Then we can download the git using</p>
+
+<pre><code class="language-bash">git clone user@HOST:git/xxx
+</code></pre>
+
+<h1 id="tricks">Tricks</h1>
+
+<h2 id="clone-with-submodule">Clone with submodule</h2>
+
+<pre><code class="language-bash">git clone git://github.com/lipop/vim.git
+cd vim
+git submodule init
+git submodule update
+</code></pre>
+
+<h2 id="use-ssh-to-connect-to-github">Use SSH to connect to github</h2>
+
+<ol>
+<li>Add your SSH key to the github website, following the wiki</li>
+<li>Clone the original project to your computer</li>
+<li>Modify the <code>.git/config</code> file: replace the url to <code>git@github.com:lipop/xxx</code></li>
+<li>Using <code>ssh-agent</code>: ssh-add .ssh/id_rsa</li>
+</ol>
+
+<h2 id="keep-an-empty-folder">Keep an empty folder</h2>
+
+<p>Create a <code>.gitkeep</code> file in the folder will do the job.</p>
+
+<h2 id="to-delete-a-file-from-tracking">To Delete a file from Tracking</h2>
+
+<p>Sometimes we may accidentally add a file to tracking. To delete the file from
+tracking:</p>
+
+<pre><code class="language-bash"># First remove the cached files
+git rm --cached &lt;FILE&gt;
+git rm --cahced -r &lt;FOLDER&gt;
+# Push to origin
+git commit -m &quot;Give up the &lt;FILE&gt;&quot;
+git push
+# Use gitignore
+vim .gitignore
+git add .
+git commit -m &quot;Adding ignore file&quot;
+git push
+</code></pre>
+
+<h2 id="to-unstage-the-changes">To unstage the changes</h2>
+
+<p>Sometimes you may mistakenly use <code>add .</code>. You can unstage the changes with</p>
+
+<pre><code class="language-bash">git reset HEAD &lt;FILE&gt;
+</code></pre>
+
+                </div>
+              </div>
+            
+          
+        </div>
+
+      </div>
+    </div>
+  </section>
+     
+  <footer class="footer" style="background-color:transparent;">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-offset-4 is-4" style="border-bottom: 1px solid #f2f2f2; ">
+        <nav class="level">
+          <div class="level-item has-text-centered">
+            <a href="mailto:yuan@bruceyli.com" style="color: grey; font-size: 0.9rem;">
+              <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            </a>
+          </div>
+          <div class="level-item has-text-centered">
+            <a href="https://medium.com/" style="color: grey; font-size: 0.9rem;">
+              <i class="fa fa-medium fa-lg" aria-hidden="true"></i>
+            </a>
+          </div>
+          <div class="level-item has-text-centered">
+            <a href="https://github.com/lipop/" style="color: grey; font-size: 0.9rem;">
+              <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+            </a>
+          </div>
+          <div class="level-item has-text-centered">
+            <a href="https://zhuanlan.zhihu.com/de-bug" style="color: grey; font-size: 0.9rem;">
+              <i class="fa fa-pencil fa-lg" aria-hidden="true"></i>
+            </a>
+          </div>
+        </nav>
+      </div>
+    </div>
+    <div class="columns">
+      <div class="column has-text-centered">
+        <p class="copyright" style="font-size:0.9rem; color: grey;">
+          © Copyright 2010-2017 <i class="fa fa-heart" aria-hidden="true"></i> 
+          Bruce Y. Li
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+  <script type="text/javascript" src="http://www.bruceyli.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-57655202-2', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+
+  
+
+  </body>
+</html>

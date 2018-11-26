@@ -1,0 +1,278 @@
+  <!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		
+		<meta name="generator" content="Hugo 0.30" />
+		<title>SQL &middot; Bruce Y. Li&#39;s Site</title>
+		<link rel="stylesheet" href="http://www.bruceyli.com/css/bulma.css">
+		<link rel="stylesheet" href="http://www.bruceyli.com/css/style.css">
+		<link rel="stylesheet" href="http://www.bruceyli.com/css/highlight.css">
+		<link rel="stylesheet" href="http://www.bruceyli.com/css/font-awesome.min.css">
+    <link rel="icon" href="http://www.bruceyli.com/images/favicon.ico" />
+
+  <body>
+  
+  <nav class="navbar" style = "padding: 0rem 4rem; margin-bottom: 0;">
+  <div class="navbar-brand">
+    <div class="navbar-item">
+      <a class="button is-dark is-outlined" href="http://www.bruceyli.com">
+        Bruce Y Li's Website
+      </a>
+    </div>
+
+  </div>
+
+  <div class="navbar-menu" style="border-bottom: 1px solid #f2f2f2">
+    <div class="navbar-end">
+      <a class="navbar-item" href="http://www.bruceyli.com/research">
+        Research
+      </a>
+      <a class="navbar-item" href="http://www.bruceyli.com/data">
+        Data
+      </a>
+      <a class="navbar-item" href="http://www.bruceyli.com/wiki">
+        Wiki
+      </a>
+      <a class="navbar-item" href="http://www.bruceyli.com/blog">
+        Blog
+      </a>
+      <a class="navbar-item" href="http://www.bruceyli.com/about">
+        About
+      </a>
+    </div>
+  </div>
+</nav>
+
+
+  <section class="section is-fluid">
+    <div class="columns">
+      <div class="column is-10 is-offset-1">
+  
+        <div class="content">
+          <h2 class="title is-3 is-spaced">
+            SQL 
+          </h2>
+          <h6 class="subtitle is-6" style="font-style: italic; font-size:90%;">
+             Publish Date: Apr 25, 2017 &nbsp;&nbsp;
+             Last Update: Apr 25, 2017
+          </h6>
+  
+          
+            
+              <p>#基本操作
+##数据库操作</p>
+
+<pre><code class="language-sql">create database DB [options];
+  --创建数据库
+show databases;
+  --查看已有的数据库
+show create DB;
+  --查看数据库的创建信息
+drop database DB;
+  --删除数据库，一定慎用！
+alter database DB [属性修改」;
+  --修改数据库属性
+</code></pre>
+
+<p>##表操作
+首先，表的操作需要确定一个工作表，可以采用的方式有首先<code>use DB</code>，或者是在表的名称前加上数据库的名称，即<code>DB.table</code>。</p>
+
+<pre><code class="language-sql">/*Create Tables*/
+create table test (
+  first_column varchar(20),
+  second_column varchar(20),
+  third_column varchar(2)
+);
+
+/*Show Tables*/
+show tables;
+show tables like `id%`;
+  --显示具有相同前缀或者后缀的表
+show create table TABLE;
+  --查看表的创建信息
+show xxx\G;
+  --利用图形化的界面来显示结果
+describe TABLE;
+desc TABLE;
+  --查询表的结构信息
+
+/*Modify*/
+drop table TABLE;
+  --删除一个表格
+drop table if exists TABLE;
+  --如果表格存在，则删除；减少报错
+rename table old1 to new1, old2 to new2;
+  --修改表名，可以同时修改多表
+rename table old1 to `db2`.new1;
+  --可以利用表的跨数据库重命名重命名数据库
+alter table TABLE add new_column int;
+  --增加新的一列，需要在最后加上列的定义
+alter table TABLE drop COL;
+  --删除一列
+alter table TABLE modify COL varchar(40);
+  --直接修改一列的定义
+alter table TABLE change old_col new_old int;
+  --列的重命名
+alter table TABLE [option];
+  --修改表的属性
+</code></pre>
+
+<p>##数据操作</p>
+
+<pre><code class="language-sql">/*插入数据*/
+insert into TABLE (COL1, COL2) values(VALUE1, VALUE2);
+  --插入数据到表TABLE中，并填充COL1和COL2
+insert into TBALE values(VALUE1, VALUE2);
+  --如果填充所有变量，则无需列出变量列表
+
+/*查询数据*/
+select * from TABLE;
+select COL1, COL2 from TABLE where;
+
+/*删除数据*/
+delete from TABLE where [OPTION];
+  --删除条件应当严格，减少误操作
+
+/*修改数据*/
+update TABLE set COL1=VALUEs where [OPTION];
+  --修改同样不可逆，慎重！
+
+</code></pre>
+
+<p>##校对规则
+不同的编码下都有不同的校对规则，因此需要了解字符之间的比较顺序。</p>
+
+<pre><code class="language-sql">show variables like 'character_set%';
+  --显示系统编码相关
+show collation;
+  --显示当前的校对规则
+</code></pre>
+
+<p>##数据类型</p>
+
+<pre><code class="language-sql">/*int*/
+alter table TABLE add COL int(DIGIT) zerofill;
+  --我们利用该命令来确定显示位数
+alter table TABLE add BOOL tinyint(1);
+  --一般利用tinyint类型来建立BOOL类型变量
+
+/*decimal*/
+float --有效数位6-7位
+double --有效数位为16位左右
+float(5,2) --一共五位，小数点后两位
+decimal(10,2) --不会出现精度丢失，但是空间占用更大；同样可以利用zerofill
+
+/*date*/
+create table dt_1 (
+a datetime,
+  --插入字符串形式'yyyy-mm-dd hh:mm:ss'
+  --支持任何分隔符的日期'yyyymmddhhmmss'，但是不建议
+  --支持两位年份
+b timestamp,
+  --更为节省空间
+c time,
+  --支持有时间分隔符：以及无分隔符的形式
+  --'5 12:34:11'表示5天12个小时34天。最多能够表示34天
+d date,
+e year
+);
+
+/*string*/
+create table dt_2 (
+a char(M),
+  --M表示严格限定的长度
+b varchar(M),
+  --M表示允许的最大长度
+c text(L),
+  --同时还有tinytext, longtext类型。目前来看text和varchar区别不大。
+  --在定义时不用定义长度，使用时更为方便
+d enum('TYPE1', 'TYPE2'),
+  --在枚举内部保存的是整型
+);
+</code></pre>
+
+<p>##列属性
+1. NULL: 规定一个字段值是否为空
+2. default: 默认值，可以在当前字段为空的时候采用默认值
+3. primary key：一个良好的主键能够保证自身不冲突，同时主键应当不属于任何实体的真实属性。主键不能为空，不能重复。我们希望每次增加一条记录时能够自动增加。自动增长的初始值，通过alter table auto_increment N来实现。当然PK也可以手动定义插入。</p>
+
+<pre><code class="language-sql">create table sample (
+  a int not NULL default 10,
+  b int,
+  id int primary key auto_increment
+);
+</code></pre>
+
+            
+          
+        </div>
+
+      </div>
+    </div>
+  </section>
+     
+  <footer class="footer" style="background-color:transparent;">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-offset-4 is-4" style="border-bottom: 1px solid #f2f2f2; ">
+        <nav class="level">
+          <div class="level-item has-text-centered">
+            <a href="mailto:yuan@bruceyli.com" style="color: grey; font-size: 0.9rem;">
+              <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+            </a>
+          </div>
+          <div class="level-item has-text-centered">
+            <a href="https://medium.com/" style="color: grey; font-size: 0.9rem;">
+              <i class="fa fa-medium fa-lg" aria-hidden="true"></i>
+            </a>
+          </div>
+          <div class="level-item has-text-centered">
+            <a href="https://github.com/lipop/" style="color: grey; font-size: 0.9rem;">
+              <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+            </a>
+          </div>
+          <div class="level-item has-text-centered">
+            <a href="https://zhuanlan.zhihu.com/de-bug" style="color: grey; font-size: 0.9rem;">
+              <i class="fa fa-pencil fa-lg" aria-hidden="true"></i>
+            </a>
+          </div>
+        </nav>
+      </div>
+    </div>
+    <div class="columns">
+      <div class="column has-text-centered">
+        <p class="copyright" style="font-size:0.9rem; color: grey;">
+          © Copyright 2010-2017 <i class="fa fa-heart" aria-hidden="true"></i> 
+          Bruce Y. Li
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+  <script type="text/javascript" src="http://www.bruceyli.com/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-57655202-2', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+
+  
+
+  </body>
+</html>
